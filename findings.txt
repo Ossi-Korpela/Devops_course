@@ -1,0 +1,4 @@
+The Ips shown don't seem to be the same as the hosts.
+Available disk space is shared with the host. Docker of course has the volumes feature if you wan to change this.
+The containers have their own isolated processes, which is very much one of the selling points of containerization in the first place.
+The containers seem to share the uptime with the docker engine.
