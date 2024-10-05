@@ -1,0 +1,20 @@
+version: '3.8'
+services:
+  service1:
+    build: ./service1
+    ports:
+      - "8199:8199"
+    depends_on:
+      - service2
+    networks:
+      - ex1-net
+
+  service2:
+    build: ./service2
+    ports:
+      - "8200:8200"
+    networks:
+      - ex1-net
+
+networks:
+  ex1-net:

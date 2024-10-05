@@ -1,0 +1,8 @@
+I used ChatGPT as google replacement for the following:
+
+How do I get system info mentioned in the exercise with python and js? (This part mostly copy-pasted from there)
+How to insert dependecies in containerized python apps?
+
+Helped me save time by finding something that just worked instead of going through multiple stack overflow pages.
+Didn't find mistakes in the parts of the output that I used.
+
