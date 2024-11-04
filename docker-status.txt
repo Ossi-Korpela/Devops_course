@@ -1,0 +1,17 @@
+docker container ls
+CONTAINER ID   IMAGE            COMMAND                  CREATED              STATUS          PORTS                  NAMES
+348239fa0ce4   ex1-service2     "docker-entrypoint.s…"   About a minute ago   Up 12 seconds                          ex1-service2-1
+17fc5adcce2a   ex1-nginx        "/docker-entrypoint.…"   14 minutes ago       Up 11 seconds   0.0.0.0:8198->80/tcp   ex1-nginx-1
+fb67b234c67d   ex1-service1_3   "python ./service1.py"   14 minutes ago       Up 12 seconds                          ex1-service1_3-1
+829ccc06f9ce   ex1-service1_1   "python ./service1.py"   14 minutes ago       Up 12 seconds                          ex1-service1_1-1
+bfd273bc8d54   ex1-service1_2   "python ./service1.py"   14 minutes ago       Up 12 seconds                          ex1-service1_2-1
+a81f3018bffe   alpine           "sh -c 'nc -l -p 830…"   5 minutes ago        Up 12 seconds                          ex1-shutdown_service-1
+
+docker network ls
+NETWORK ID     NAME                    DRIVER    SCOPE
+cdd4000b7b40   bridge                  bridge    local
+0e104f237944   ex1_ex1-net             bridge    local
+e65c3a0db6de   ex1_ex4-net             bridge    local
+2f18401d2a53   host                    host      local
+916548cafa6e   none                    null      local
+1ebcf7b8d412   webdev2-group_backend   bridge    local
