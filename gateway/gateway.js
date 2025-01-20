@@ -14,6 +14,9 @@ function logStateTransition(oldState, newState) {
 }
 
 
+app.get('/state', (req, res) => {
+  return res.status(200).json({ state: currentState });
+});
 
 app.put('/state', (req, res) => {
   const requestedState = req.body.trim(); 
