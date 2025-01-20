@@ -16,8 +16,7 @@ build:
   script:
     - echo "♥♥♥♥♥♥ building docker imgages"
     - docker build -t $DOCKER_IMAGE_NAME:$DOCKER_IMAGE_TAG .
-  tags:
-    - windowsrunner
+
 
 test:
   stage: test
@@ -27,8 +26,7 @@ test:
   script:
     - echo "♥♥♥♥♥♥♥♥ running tests"
     - docker run --rm $DOCKER_IMAGE_NAME:$DOCKER_IMAGE_TAG python /app/tests/run_tests.py
-  tags:
-    - windowsrunner
+
 
 deploy:
   stage: deploy
@@ -39,6 +37,5 @@ deploy:
     - echo "♥♥♥♥♥ deploying the system"
     - docker-compose down || true
     - docker-compose up -d --build
-  tags:
-    - windowsrunner
+
   when: on_success
