@@ -1,20 +1,43 @@
 version: '3.8'
 services:
-  service1:
-    build: ./service1
+  nginx:
+    build: ./nginx
     ports:
-      - "8199:8199"
+      - "8198:80"
     depends_on:
-      - service2
+      - service1_1
+      - service1_2
+      - service1_3
+      - shutdown_service
     networks:
-      - ex1-net
+      - ex4-net
+
+  service1_1:
+    build: ./service1
+    networks:
+      - ex4-net
+  service1_2:
+    build: ./service1
+    networks:
+      - ex4-net
+  service1_3:
+    build: ./service1
+    networks:
+      - ex4-net
 
   service2:
     build: ./service2
-    ports:
-      - "8200:8200"
     networks:
-      - ex1-net
+      - ex4-net
+
+
+  shutdown_service:
+    image: alpine
+    command: sh -c "nc -l -p 8300 -e /shutdown.sh"
+    volumes:
+      - ./shutdown.sh:/shutdown.sh
+    networks:
+      - ex4-net
 
 networks:
-  ex1-net:
+  ex4-net:
