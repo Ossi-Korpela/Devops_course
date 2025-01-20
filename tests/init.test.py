@@ -6,6 +6,7 @@ def test_initial_state():
 
     resp = requests.get("http://localhost:8197/state")
     assert resp.json().text == 'INIT'
+    
 
 
 
