@@ -7,12 +7,14 @@ variables:
   DOCKER_DRIVER: overlay2
   DOCKER_IMAGE_NAME: my-app
   DOCKER_IMAGE_TAG: latest
+  DOCKER_HOST: tcp://docker:2375
 
 build:
   stage: build
   image: docker:23.0.1
   services:
-    - docker:dind
+  - name: docker:23.0.1-dind
+      alias: docker
   script:
     - echo "♥♥♥♥♥♥ building docker imgages"
     - docker build -t $DOCKER_IMAGE_NAME:$DOCKER_IMAGE_TAG .
@@ -22,7 +24,8 @@ test:
   stage: test
   image: docker:23.0.1
   services:
-    - docker:dind
+  - name: docker:23.0.1-dind
+      alias: docker
   script:
     - echo "♥♥♥♥♥♥♥♥ running tests"
     - docker run --rm $DOCKER_IMAGE_NAME:$DOCKER_IMAGE_TAG python /app/tests/run_tests.py
@@ -32,7 +35,8 @@ deploy:
   stage: deploy
   image: docker:23.0.1
   services:
-    - docker:dind
+  - name: docker:23.0.1-dind
+      alias: docker
   script:
     - echo "♥♥♥♥♥ deploying the system"
     - docker-compose down || true
