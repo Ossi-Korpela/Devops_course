@@ -5,5 +5,5 @@ def test_initial_state():
     assert resp.status_code == 200
 
     resp = requests.get("http://localhost:8197/state")
-    assert resp.json().state == 'INIT'
+    assert resp.json().text == 'INIT'
 
