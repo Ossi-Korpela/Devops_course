@@ -15,7 +15,7 @@ function logStateTransition(oldState, newState) {
 
 
 app.get('/state', (req, res) => {
-  return res.status(200).json({ state: currentState });
+  return res.status(200).send(currentState)
 });
 
 app.put('/state', (req, res) => {
