@@ -10,7 +10,8 @@ variables:
 
 build:
   stage: build
-  image: docker:23.0.1
+  image: docker:stable
+  privileged: true
   script:
     - echo "♥♥♥♥♥♥ building docker imgages"    
     - docker info
@@ -19,7 +20,7 @@ build:
 
 test:
   stage: test
-  image: docker:23.0.1
+  image: docker:stable
   script:
     - echo "♥♥♥♥♥♥♥♥ running tests"
     - docker run --rm $DOCKER_IMAGE_NAME:$DOCKER_IMAGE_TAG python /app/tests/run_tests.py
@@ -27,7 +28,7 @@ test:
 
 deploy:
   stage: deploy
-  image: docker:23.0.1
+  image: docker:stable
   services:
   script:
     - echo "♥♥♥♥♥ deploying the system"
