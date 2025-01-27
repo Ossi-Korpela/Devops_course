@@ -40,8 +40,9 @@ test:
     - echo "♥♥♥♥♥♥♥♥ running tests"
     - docker-compose up -d
     - sleep 10 
-    - docker ps
-    - docker-compose exec service1_1 pytest tests/
+    - docker ps    
+    - docker-compose logs nginx
+    - docker-compose exec test-runner pytest
     - docker-compose down
 
 
