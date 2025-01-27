@@ -20,7 +20,7 @@ build:
   stage: build
   script:
     - echo "♥♥♥♥♥♥ building docker images"
-    - docker build -t $DOCKER_IMAGE_NAME-gateway:$DOCKER_IMAGE_TAG -f gateway/Dockerfile gateway
+    - docker build -t $DOCKER_IMAGE_NAME-nginx:$DOCKER_IMAGE_TAG -f nginx/Dockerfile nginx
     - docker build -t $DOCKER_IMAGE_NAME-service1:$DOCKER_IMAGE_TAG -f service1/Dockerfile service1
     - docker build -t $DOCKER_IMAGE_NAME-service2:$DOCKER_IMAGE_TAG -f service2/Dockerfile service2
     - docker-compose build
