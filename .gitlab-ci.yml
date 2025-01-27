@@ -4,16 +4,17 @@ stages:
   - deploy
 
 variables:
+  DOCKER_DRIVER: overlay2
   DOCKER_IMAGE_NAME: my-app
-  DOCKER_IMAGE_TAG: stable
+  DOCKER_IMAGE_TAG: docker:23.0.5
 
 
 default:
   image: 
-    name: docker:stable
+    name: docker:23.0.5
     entrypoint: [""]
   services:
-    - docker:dind
+    - docker:23.0.5-dind
 
 before_script:
   - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" "$CI_REGISTRY"
@@ -29,7 +30,6 @@ build:
     - docker build -t $DOCKER_IMAGE_NAME-nginx:$DOCKER_IMAGE_TAG -f nginx/Dockerfile nginx
     - docker build -t $DOCKER_IMAGE_NAME-service1:$DOCKER_IMAGE_TAG -f service1/Dockerfile service1
     - docker build -t $DOCKER_IMAGE_NAME-service2:$DOCKER_IMAGE_TAG -f service2/Dockerfile service2
-    - docker run docker/compose --build
     - docker images
 
 
