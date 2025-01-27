@@ -20,8 +20,7 @@ before_script:
   - docker info
   - apk update
   - apk upgrade
-  - apk add python python-dev py-pip build-base libffi-dev openssl-dev
-  - apk add python python-dev py-pip build-base
+  - apk add py-pip build-base libffi-dev openssl-dev
   - pip install docker-compose
 
 
