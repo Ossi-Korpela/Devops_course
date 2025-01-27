@@ -3,34 +3,27 @@ stages:
   - test
   - deploy
 
-services:
-  - name: docker:20.10-dind
-    alias: docker
-
 variables:
   #DOCKER_DRIVER: overlay2
-  DOCKER_TLS_CERTDIR: ""
-  # Point Docker CLI to the DinD service
-  DOCKER_HOST: "tcp://docker:2375"
-  # Use overlay2 which is often recommended
-  DOCKER_DRIVER: overlay2
+  DOCKER_IMAGE_NAME: my-app
+  DOCKER_IMAGE_TAG: stable
 
 default:
-  image: docker:20.10
+  image: docker:stable
 
 build:
   stage: build
   script:
     - echo "♥♥♥♥♥♥ building docker imgages"    
     - docker info
-    - docker build -t devops-project .
+    - docker build -t $DOCKER_IMAGE_NAME:$DOCKER_IMAGE_TAG .
 
 
 test:
   stage: test
   script:
     - echo "♥♥♥♥♥♥♥♥ running tests"
-    - docker run --rm devops-project python /app/tests/run_tests.py
+    - docker run --rm $DOCKER_IMAGE_NAME:$DOCKER_IMAGE_TAG python /app/tests/run_tests.py
 
 
 deploy:
@@ -42,5 +35,4 @@ deploy:
     - docker-compose up -d --build
 
   when: on_success
-
 
