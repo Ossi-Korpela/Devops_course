@@ -16,7 +16,7 @@ build:
   script:
     - echo "♥♥♥♥♥♥ building docker imgages"    
     - docker info
-    - docker build -t $DOCKER_IMAGE_NAME:$DOCKER_IMAGE_TAG .
+    - docker-compose build -t $DOCKER_IMAGE_NAME:$DOCKER_IMAGE_TAG .
 
 
 test:
@@ -35,6 +35,8 @@ deploy:
     - docker-compose up -d --build
 
   when: on_success
+
+
 
 
 
