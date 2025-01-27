@@ -42,7 +42,8 @@ test:
     - sleep 10 
     - docker ps    
     - docker-compose logs nginx
-    - docker-compose exec test-runner pytest
+    - docker build -t python-pytest tests
+    - docker run --rm python-pytest 
     - docker-compose down
 
 
