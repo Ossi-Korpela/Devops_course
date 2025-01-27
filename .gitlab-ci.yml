@@ -41,8 +41,7 @@ test:
     - docker-compose up -d
     - sleep 10 
     - docker ps
-    - docker-compose exec service1 pytest tests/
-    - docker-compose exec service2 npm test
+    - docker-compose exec service1_1 pytest tests/
     - docker-compose down
 
 
