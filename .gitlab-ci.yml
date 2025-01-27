@@ -6,7 +6,7 @@ stages:
 variables:
   DOCKER_DRIVER: overlay2
   DOCKER_IMAGE_NAME: my-app
-  DOCKER_IMAGE_TAG: docker:23.0.5
+  DOCKER_IMAGE_TAG: stable
 
 
 default:
