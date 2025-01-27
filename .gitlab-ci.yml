@@ -17,11 +17,6 @@ default:
 
 before_script:
   - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" "$CI_REGISTRY"
-  - docker info
-  - apk update
-  - apk upgrade
-  - apk add py-pip build-base libffi-dev openssl-dev
-  - pip install docker-compose
 
 
 
@@ -34,7 +29,7 @@ build:
     - docker build -t $DOCKER_IMAGE_NAME-nginx:$DOCKER_IMAGE_TAG -f nginx/Dockerfile nginx
     - docker build -t $DOCKER_IMAGE_NAME-service1:$DOCKER_IMAGE_TAG -f service1/Dockerfile service1
     - docker build -t $DOCKER_IMAGE_NAME-service2:$DOCKER_IMAGE_TAG -f service2/Dockerfile service2
-    - docker-compose build
+    - docker run docker/compose --build
     - docker images
 
 
