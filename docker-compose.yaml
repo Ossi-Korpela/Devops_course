@@ -39,6 +39,12 @@ services:
     networks:
       - ex4-net
 
+  api-gateway:
+    image: node
+    build: ./gateway
+    networks:
+      - ex4-net
+
   test-runner:
     image: python:3.10
     working_dir: /app
