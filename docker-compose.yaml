@@ -39,5 +39,16 @@ services:
     networks:
       - ex4-net
 
+  test-runner:
+    image: python:3.10
+    working_dir: /app
+    volumes:
+      - ./tests:/app/tests
+    networks:
+      - ex4-net
+    depends_on:
+      - nginx
+    entrypoint: ["pytest", "--base-url=http://nginx:80"]
+
 networks:
   ex4-net:

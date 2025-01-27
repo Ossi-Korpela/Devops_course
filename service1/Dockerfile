@@ -7,6 +7,5 @@ COPY requirements.txt ./
 RUN pip install --no-cache-dir -r requirements.txt
 COPY service1.py ./
 
-COPY . .
 
 CMD [ "python", "./service1.py" ]
