@@ -38,7 +38,12 @@ test:
   stage: test
   script:
     - echo "♥♥♥♥♥♥♥♥ running tests"
-    - docker run --rm $DOCKER_IMAGE_NAME:$DOCKER_IMAGE_TAG python /app/tests/run_tests.py
+    - docker-compose up -d
+    - sleep 10 
+    - docker ps
+    - docker-compose exec service1 pytest tests/
+    - docker-compose exec service2 npm test
+    - docker-compose down
 
 
 deploy:
