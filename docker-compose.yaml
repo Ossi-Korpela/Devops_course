@@ -3,8 +3,8 @@ services:
   nginx:
     build: ./nginx
     ports:
-      - "8198"
-      - "8197"
+      - "8198:80"
+      - "8197:80"
     depends_on:
       - service1_1
       - service1_2
@@ -40,22 +40,17 @@ services:
     networks:
       - ex4-net
 
-  api_gateway:
-    image: node
-    build: ./gateway
-    networks:
-      - ex4-net
 
 
- # test-runner:
- #   image: python:3.10
- #   working_dir: /app
- #   volumes:
- #     - ./tests:/app/tests
- #   networks:
- #     - ex4-net
- #   depends_on:
- #     - nginx
+  #  test_runner:
+  #    build: ./tests
+  #    image: python:3.10
+  #    working_dir: /app
+  #    networks:
+  #      - ex4-net
+  #    depends_on:
+  #      - nginx
 
 networks:
   ex4-net:
+    driver: bridge

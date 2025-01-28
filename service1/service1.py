@@ -6,7 +6,7 @@ import threading
 import datetime
 
 import requests
-from flask import Flask, jsonify, request, abort
+from flask import Flask, jsonify, request, abort, Response
 
 lock = threading.Lock()
 unavailable_until = 0
@@ -78,7 +78,7 @@ def service_state():
     global state
 
     if request.method == 'GET':
-        return jsonify({"state": state}), 200
+        return state, 200
 
     elif request.method == 'PUT':
         new_state = request.args.get("state")
