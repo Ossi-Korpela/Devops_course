@@ -111,11 +111,9 @@ def service_state():
         if new_state == PAUSED:
             if state != PAUSED:
                 set_log(PAUSED)
-                state = PAUSED
         elif new_state == RUNNING:
             if state != RUNNING:
                 set_log(RUNNING)
-                state = RUNNING
         elif new_state == INIT:
             set_log(INIT)
         else:
