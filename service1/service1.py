@@ -19,12 +19,31 @@ state = INIT
 
 app = Flask(__name__)
 
-log_data = f"{datetime.datetime.now()}: {INIT}\n"
+
+
+def get_state():
+    global state
+    with open("state/state.txt", "r") as state_file:
+        state = state_file.readline()
+        state_file.close()
+        
+def set_state(target_state):
+    with open("state/state.txt", "w") as state_file:
+        global state
+        state_file.write(target_state)
+        state = target_state
+        state_file.close()
 
 def set_log(new_state):
-    global log_data, state
-    old_state = state
-    log_data += f"{datetime.datetime.now()}: {old_state}->{new_state}\n"
+    global state
+    get_state()   
+    old_state = state    
+    set_state(new_state)
+    with open("state/log.txt", "a") as log_file:
+        log_file.write(f"{datetime.datetime.now()}: {old_state}->{new_state}\n")
+        log_file.close()
+
+    
 
 def exec_command(command):
     try:
@@ -76,6 +95,7 @@ def index():
 @app.route('/state', methods=['GET', 'PUT'])
 def service_state():
     global state
+    get_state()
 
     if request.method == 'GET':
         return state, 200
@@ -97,6 +117,13 @@ def service_state():
             return jsonify({"error": f"Invalid state: {new_state}"}), 400
 
         return state, 200
+    
+@app.route('/run-log', methods=['GET'])
+def get_run_log():
+    content = ""
+    with open("state/log.txt", "r") as log_file:
+        content = log_file.read()
+    return content, 200
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8199)
