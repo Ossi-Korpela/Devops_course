@@ -96,7 +96,7 @@ def service_state():
         else:
             return jsonify({"error": f"Invalid state: {new_state}"}), 400
 
-        return jsonify({"state": state}), 200
+        return state, 200
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8199)
