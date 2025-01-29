@@ -48,7 +48,7 @@ def sys_info():
     }
 
 
-@app.route('/', methods=['GET'])
+@app.route('/api', methods=['GET'])
 def index():
     global unavailable_until, state
 
