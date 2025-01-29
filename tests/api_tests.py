@@ -118,4 +118,3 @@ def test_paused_state_changes():
 
     response = requests.get(f"{BASE_URL}/api", timeout=TIMEOUT)
     assert response.status_code == 200, "Expected 200 from /api endpoint"
-    time.sleep(0.1)
