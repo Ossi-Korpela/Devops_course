@@ -27,3 +27,25 @@ def test_state_change_no_auth():
         assert "401" in response.text or "Unauthorized" in response.text, (
             "Expected error page to contain '401' or 'Unauthorized'"
         )
+
+def test_state_change_admin():
+    """
+    Corresponds to:
+      it('should allow state change after login as admin', ...)
+    """
+    states_to_test = ["PAUSED", "RUNNING"]
+    for state in states_to_test:
+        response = requests.put(
+            f"{BASE_URL}/state",
+            params={"state": state},
+            auth=AUTH,
+            timeout=TIMEOUT
+        )
+        assert response.status_code == 200, (
+            f"Expected 200 when changing state to {state} as admin, "
+            f"got {response.status_code}"
+        )
+        
+        assert response.text.strip() == state, (
+            f"Expected response body to be '{state}', got '{response.text}'"
+        )
