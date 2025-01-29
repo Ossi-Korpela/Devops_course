@@ -23,12 +23,12 @@ app = Flask(__name__)
 
 def get_state():
     global state
-    with open("state/state.txt", "r") as state_file:
+    with open("/state/state.txt", "r") as state_file:
         state = state_file.readline()
         state_file.close()
         
 def set_state(target_state):
-    with open("state/state.txt", "w") as state_file:
+    with open("/state/state.txt", "w") as state_file:
         global state
         state_file.write(target_state)
         state = target_state
@@ -39,11 +39,12 @@ def set_log(new_state):
     get_state()   
     old_state = state    
     set_state(new_state)
-    with open("state/log.txt", "a") as log_file:
+    with open("/state/log.txt", "a") as log_file:
         log_file.write(f"{datetime.datetime.now()}: {old_state}->{new_state}\n")
         log_file.close()
 
-    
+
+
 
 def exec_command(command):
     try:
@@ -70,7 +71,9 @@ def sys_info():
 @app.route('/api', methods=['GET'])
 def index():
     global unavailable_until, state
-
+    get_state()
+    if state == INIT:
+        return jsonify({"error": "not running"}), 503
     if state == PAUSED:
         return jsonify({"error": "paused"}), 503
     current_time = time.time()
@@ -113,6 +116,8 @@ def service_state():
             if state != RUNNING:
                 set_log(RUNNING)
                 state = RUNNING
+        elif new_state == INIT:
+            set_log(INIT)
         else:
             return jsonify({"error": f"Invalid state: {new_state}"}), 400
 
@@ -121,7 +126,7 @@ def service_state():
 @app.route('/run-log', methods=['GET'])
 def get_run_log():
     content = ""
-    with open("state/log.txt", "r") as log_file:
+    with open("/state/log.txt", "r") as log_file:
         content = log_file.read()
     return content, 200
 
