@@ -35,4 +35,4 @@ def test_run_log_changes():
     response = requests.get(f"{BASE_URL}/run-log", timeout=TIMEOUT)
     assert response.status_code == 200, "Expected 200 from /run-log endpoint after changes to state"
     assert isinstance(response.text, str)
-    assert response.text.find("INIT->RUNNING") != -1, "Expected response to contain 'INIT->RUNNING'"
+    assert response.text.find("INIT->RUNNING") != -1, f"Expected response to contain 'INIT->RUNNING', was {response.text}"
