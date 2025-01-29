@@ -8,8 +8,7 @@ TIMEOUT = 5
 
 def test_state_change_no_auth():
     """
-    Corresponds to:
-      it('should not allow state change without login (401)', ...)
+      Shouldn't allow state change without login (401)
     """
     states_to_test = ["PAUSED", "RUNNING"]
     for state in states_to_test:
@@ -30,8 +29,7 @@ def test_state_change_no_auth():
 
 def test_state_change_admin():
     """
-    Corresponds to:
-      it('should allow state change after login as admin', ...)
+      Should allow state change after login as admin
     """
     states_to_test = ["PAUSED", "RUNNING"]
     for state in states_to_test:
