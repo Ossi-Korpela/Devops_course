@@ -22,6 +22,8 @@ state = INIT
 app = Flask(__name__)
 
 STATE_PATH = "/state/"
+
+# make the log and state files and initialize them on startup
 os.makedirs(os.path.dirname(f"{STATE_PATH}state.txt"), exist_ok=True)
 if not os.path.exists(f"{STATE_PATH}state.txt"):
     with open(f"{STATE_PATH}state.txt", "w") as f:
@@ -37,27 +39,39 @@ else: # clear log on startup
         f.write("")
         f.close()
 
+# synchronize the state from the shared file to 
 def get_state():
     global state
-    with open(f"{STATE_PATH}state.txt", "r") as state_file:
-        state = state_file.readline()
-        state_file.close()
+    try:
+        with open(f"{STATE_PATH}state.txt", "r") as state_file:
+            state = state_file.readline()
+            state_file.close()
+    except OSError as e:
+        print(e)
         
+# Set the state for all service1s
 def set_state(target_state):
-    with open(f"{STATE_PATH}state.txt", "w") as state_file:
-        global state
-        state_file.write(target_state)
-        state = target_state
-        state_file.close()
+    try:
+        with open(f"{STATE_PATH}state.txt", "w") as state_file:
+            global state
+            state_file.write(target_state)
+            state = target_state
+            state_file.close()
+    except OSError as e:
+        print(e)
 
+# Set the state and log the change
 def set_log(new_state):
     global state
     get_state()   
     old_state = state    
     set_state(new_state)
-    with open(f"{STATE_PATH}log.txt", "a") as log_file:
-        log_file.write(f"{datetime.datetime.now()}: {old_state}->{new_state}\n")
-        log_file.close()
+    try:
+        with open(f"{STATE_PATH}log.txt", "a") as log_file:
+            log_file.write(f"{datetime.datetime.now()}: {old_state}->{new_state}\n")
+            log_file.close()
+    except OSError as e:
+        print(e)
 
 
 
@@ -92,6 +106,7 @@ def shutdown_system():
 
 def stop_service():
     set_state(SHUTDOWN)
+    #The shutdown is delayed to give Flask time to make the reponse
     def delayed_shutdown():
         time.sleep(5)
         shutdown_system()
@@ -115,6 +130,7 @@ def sys_info():
 def index():
     global unavailable_until, state
     get_state()
+    # Don't answer unless RUNNING
     if state == INIT:
         return jsonify({"error": "not running"}), 503
     if state == SHUTDOWN:
@@ -172,9 +188,13 @@ def service_state():
 @app.route('/run-log', methods=['GET'])
 def get_run_log():
     content = ""
-    with open(f"{STATE_PATH}log.txt", "r") as log_file:
-        content = log_file.read()
-        log_file.close()
+    try:
+        with open(f"{STATE_PATH}log.txt", "r") as log_file:
+            # return the whole content of the log
+            content = log_file.read()
+            log_file.close()
+    except OSError as e:
+        print(e)
     return content, 200
 
 

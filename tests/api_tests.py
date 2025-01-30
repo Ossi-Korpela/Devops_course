@@ -39,7 +39,7 @@ def test_state_change_no_auth():
         # try changing state without auth
         response = requests.put(
             f"{BASE_URL}/state",
-            params={"state": state},
+            data=state,
             timeout=TIMEOUT
         )
         assert response.status_code == 401, (

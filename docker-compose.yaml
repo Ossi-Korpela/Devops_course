@@ -40,9 +40,6 @@ services:
       - ex4-net
 
 
- 
- 
-
 volumes:
   shared_data:
 
