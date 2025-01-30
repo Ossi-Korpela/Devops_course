@@ -4,6 +4,9 @@ import subprocess
 import time
 import threading
 import datetime
+import logging
+import docker
+
 
 import requests
 from flask import Flask, jsonify, request, abort, Response
@@ -54,14 +57,42 @@ def set_log(new_state):
 
 
 
-def exec_command(command):
-    try:
-        result = subprocess.run(command.split(), stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-        if result.stderr and not result.stdout:
-            return f"Error: {result.stderr}"
-        return result.stdout
-    except Exception as e:
-        return f"Error: {str(e)}"
+
+
+def shutdown_system():
+    client = docker.from_env()
+    current_instance = socket.gethostname()
+
+    self_id = None
+
+    # stop other containers
+    for container in client.containers.list():
+        if "service1" in container.name and container.attrs['Config']['Hostname'] == current_instance:
+            self_id = container.id
+        else:
+            container.stop()
+            container.remove()
+
+    # sate to init
+    with open(f"{STATE_PATH}state.txt", "w", encoding="utf-8") as state_file:
+        state_file.write("INIT")
+
+    #  shut down self
+    if self_id:
+        time.sleep(1)
+        self_container = client.containers.get(self_id)
+        self_container.stop()
+
+    
+
+
+def stop_service():
+    set_state(SHUTDOWN)
+    def delayed_shutdown():
+        time.sleep(5)
+        shutdown_system()
+    threading.Thread(target=delayed_shutdown).start()
+    return jsonify({"message": "Shutting down services..."}), 200
 
 def sys_info():
     ip = subprocess.getoutput("hostname -I").strip()
@@ -82,6 +113,8 @@ def index():
     get_state()
     if state == INIT:
         return jsonify({"error": "not running"}), 503
+    if state == SHUTDOWN:
+        return jsonify({"error": "shutting down"}), 503
     if state == PAUSED:
         return jsonify({"error": "paused"}), 503
     current_time = time.time()
@@ -116,6 +149,9 @@ def service_state():
         if not new_state:
             return jsonify({"error": "no state parameter"}), 400
 
+        if new_state == SHUTDOWN:
+            return stop_service()
+
         if new_state == PAUSED:
             if state != PAUSED:
                 set_log(PAUSED)
@@ -136,6 +172,10 @@ def get_run_log():
         content = log_file.read()
         log_file.close()
     return content, 200
+
+
+
+
 
 if __name__ == '__main__':
     app.debug = True

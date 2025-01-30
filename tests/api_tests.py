@@ -136,3 +136,4 @@ def test_stop_service():
     else:
         # If the endpoint returns any other status code, fail the test
         pytest.fail(f"Unexpected status code: {response.status_code}")
+
