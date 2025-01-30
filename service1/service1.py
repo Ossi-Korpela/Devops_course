@@ -126,6 +126,7 @@ def get_run_log():
     content = ""
     with open("/state/log.txt", "r") as log_file:
         content = log_file.read()
+        log_file.close()
     return content, 200
 
 if __name__ == '__main__':
