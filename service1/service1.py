@@ -19,16 +19,25 @@ state = INIT
 
 app = Flask(__name__)
 
+STATE_PATH = "/state/"
+os.makedirs(os.path.dirname(f"{STATE_PATH}state.txt"), exist_ok=True)
+if not os.path.exists(f"{STATE_PATH}state.txt"):
+    with open(f"{STATE_PATH}state.txt", "w") as f:
+        f.write("INIT")
+        f.close()
 
+if not os.path.exists(f"{STATE_PATH}log.txt"):
+    with open(f"{STATE_PATH}log.txt", "w") as f:
+        f.close()
 
 def get_state():
     global state
-    with open("/state/state.txt", "r") as state_file:
+    with open(f"{STATE_PATH}state.txt", "r") as state_file:
         state = state_file.readline()
         state_file.close()
         
 def set_state(target_state):
-    with open("/state/state.txt", "w") as state_file:
+    with open(f"{STATE_PATH}state.txt", "w") as state_file:
         global state
         state_file.write(target_state)
         state = target_state
@@ -39,7 +48,7 @@ def set_log(new_state):
     get_state()   
     old_state = state    
     set_state(new_state)
-    with open("/state/log.txt", "a") as log_file:
+    with open(f"{STATE_PATH}log.txt", "a") as log_file:
         log_file.write(f"{datetime.datetime.now()}: {old_state}->{new_state}\n")
         log_file.close()
 
@@ -124,7 +133,7 @@ def service_state():
 @app.route('/run-log', methods=['GET'])
 def get_run_log():
     content = ""
-    with open("/state/log.txt", "r") as log_file:
+    with open(f"{STATE_PATH}log.txt", "r") as log_file:
         content = log_file.read()
         log_file.close()
     return content, 200

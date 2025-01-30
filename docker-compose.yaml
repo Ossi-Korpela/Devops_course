@@ -18,19 +18,19 @@ services:
     networks:
       - ex4-net
     volumes: #we share the state in a shared volume
-      - ./service1/shared_data:/state
+      - shared_data:/state
   service1_2:
     build: ./service1
     networks:
       - ex4-net
     volumes:
-      - ./service1/shared_data:/state
+      - shared_data:/state
   service1_3:
     build: ./service1
     networks:
       - ex4-net
     volumes:
-      - ./service1/shared_data:/state
+      - shared_data:/state
 
   service2:
     build: ./service2
@@ -47,6 +47,8 @@ services:
       - ex4-net
 
 
+volumes:
+  shared_data:
 
 networks:
   ex4-net:
