@@ -54,7 +54,6 @@ def set_log(new_state):
 
 
 
-
 def exec_command(command):
     try:
         result = subprocess.run(command.split(), stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
