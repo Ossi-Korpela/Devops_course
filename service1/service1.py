@@ -4,7 +4,6 @@ import subprocess
 import time
 import threading
 import datetime
-import logging
 import docker
 
 
