@@ -103,6 +103,9 @@ def test_run_log_changes():
 
 @pytest.mark.order(7)
 def test_paused_state_changes():
+    """
+    Should not anwser when paused, and should return anwsering when running again
+    """
     response = put_to("INIT")
     assert response.status_code == 200, "state changes should work as before"
     response = put_to("PAUSED")
@@ -118,3 +121,18 @@ def test_paused_state_changes():
 
     response = requests.get(f"{BASE_URL}/api", timeout=TIMEOUT)
     assert response.status_code == 200, "Expected 200 from /api endpoint"
+    time.sleep(2)
+
+@pytest.mark.order(8)
+def test_stop_service():
+    """
+    Should stop the service
+    """
+    response = put_to("SHUTDOWN")
+    if response.status_code == 200:
+        assert "Shutting down services..." in response.text, (
+            "Expected 'Shutting down services...' in response"
+        )
+    else:
+        # If the endpoint returns any other status code, fail the test
+        pytest.fail(f"Unexpected status code: {response.status_code}")
