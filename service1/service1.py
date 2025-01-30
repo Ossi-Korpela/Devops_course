@@ -33,6 +33,11 @@ if not os.path.exists(f"{STATE_PATH}log.txt"):
     with open(f"{STATE_PATH}log.txt", "w") as f:
         f.close()
 
+else: # clear log on startup
+    with open(f"{STATE_PATH}log.txt", "w") as f:
+        f.write("")
+        f.close()
+
 def get_state():
     global state
     with open(f"{STATE_PATH}state.txt", "r") as state_file:
@@ -107,7 +112,7 @@ def sys_info():
     }
 
 
-@app.route('/api', methods=['GET'])
+@app.route('/request', methods=['GET'])
 def index():
     global unavailable_until, state
     get_state()
@@ -145,7 +150,7 @@ def service_state():
         return state, 200
 
     elif request.method == 'PUT':
-        new_state = request.args.get("state")
+        new_state = request.get_data(as_text=True)
         if not new_state:
             return jsonify({"error": "no state parameter"}), 400
 

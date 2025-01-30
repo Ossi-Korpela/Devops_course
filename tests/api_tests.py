@@ -7,11 +7,17 @@ BASE_URL = "http://host.docker.internal:8197"
 AUTH = HTTPBasicAuth("admin", "secret")
 TIMEOUT = 5
 
+#util function for put calls
 def put_to(state):
+    headers = {
+                "Content-Type": "text/plain",
+                "Accept": "text/plain"
+            }
     return requests.put(
-            f"{BASE_URL}/state",
-            params={"state": state},
+            url=f"{BASE_URL}/state",
+            data=state,
             auth=AUTH,
+            headers=headers,
             timeout=TIMEOUT
         )
 
@@ -69,8 +75,8 @@ def test_ex4_functionality():
     assert response.status_code == 200, "state changes should work as before"
 
     
-    response = requests.get(f"{BASE_URL}/api", timeout=TIMEOUT)
-    assert response.status_code == 200, "Expected 200 from /api endpoint"
+    response = requests.get(f"{BASE_URL}/request", timeout=TIMEOUT)
+    assert response.status_code == 200, "Expected 200 from /request endpoint"
     data = response.json()
     assert "Service1" in data, "Expected 'Service1' in the response JSON"
     assert "Service2" in data, "Expected 'Service2' in the response JSON"
@@ -111,7 +117,7 @@ def test_paused_state_changes():
     response = put_to("PAUSED")
     assert response.status_code == 200, "state changes should work as before"
 
-    response = requests.get(f"{BASE_URL}/api", timeout=TIMEOUT)
+    response = requests.get(f"{BASE_URL}/request", timeout=TIMEOUT)
     assert response.status_code == 503, "Should be paused"
 
 
@@ -119,8 +125,8 @@ def test_paused_state_changes():
     assert response.status_code == 200, "state changes should work as before"
     time.sleep(2)
 
-    response = requests.get(f"{BASE_URL}/api", timeout=TIMEOUT)
-    assert response.status_code == 200, "Expected 200 from /api endpoint"
+    response = requests.get(f"{BASE_URL}/request", timeout=TIMEOUT)
+    assert response.status_code == 200, "Expected 200 from /request endpoint"
     time.sleep(2)
 
 @pytest.mark.order(8)
